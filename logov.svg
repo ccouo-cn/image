@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <!-- 液态粘连滤镜 -->
+    <filter id="gooey">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo"/>
+      <feBlend in="SourceGraphic" in2="goo"/>
+    </filter>
+    
+    <!-- CSS动画定义 -->
+    <style type="text/css">
+      <![CDATA[
+        /* 红色方块动画 */
+        .red-square {
+          transform-origin: center;
+          transform: scale(0.3) rotate(-45deg);
+          animation: squareReveal 1.6s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+        }
+        
+        @keyframes squareReveal {
+          0% { transform: scale(0.3) rotate(-45deg); }
+          50% { transform: scale(1.15) rotate(5deg); }
+          70% { transform: scale(0.95) rotate(-2deg); }
+          100% { transform: scale(1) rotate(0deg); }
+        }
+        
+        /* 白色圆形动画 */
+        .white-circle {
+          transform-origin: center;
+          transform: scale(0);
+          animation: circleReveal 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s forwards;
+        }
+        
+        @keyframes circleReveal {
+          0% { transform: scale(0); }
+          60% { transform: scale(1.2); }
+          80% { transform: scale(0.9); }
+          100% { transform: scale(1); }
+        }
+        
+        /* G字母绘制动画 */
+        .g-path {
+          stroke-dasharray: 300;
+          stroke-dashoffset: 300;
+          animation: draw 1.2s ease-out 1.4s forwards;
+        }
+        
+        .g-bar {
+          stroke-dasharray: 40;
+          stroke-dashoffset: 40;
+          animation: draw 0.5s ease-out 2s forwards;
+        }
+        
+        @keyframes draw {
+          to { stroke-dashoffset: 0; }
+        }
+        
+        /* 高光闪烁动画 */
+        .highlight {
+          opacity: 0;
+          animation: highlightFlash 0.8s ease-out 0.8s forwards;
+        }
+        
+        @keyframes highlightFlash {
+          0% { opacity: 0; transform: translateX(-20px); }
+          50% { opacity: 0.8; }
+          100% { opacity: 0; transform: translateX(20px); }
+        }
+        
+        /* 点击重播区域 */
+        .replay-area {
+          cursor: pointer;
+        }
+      ]]>
+    </style>
+  </defs>
+  
+  <!-- 可点击重播的透明区域 -->
+  <rect class="replay-area" x="0" y="0" width="400" height="400" fill="transparent">
+    <set attributeName="opacity" to="0" begin="click"/>
+    <set attributeName="opacity" to="1" begin="click"/>
+  </rect>
+  
+  <!-- 应用滤镜的Logo组 -->
+  <g filter="url(#gooey)">
+    <!-- 红色圆角方形 -->
+    <rect class="red-square" x="75" y="75" width="250" height="250" rx="62" ry="62" fill="#D63031"/>
+    
+    <!-- 白色圆形 -->
+    <circle class="white-circle" cx="200" cy="200" r="82" fill="#ffffff"/>
+    
+    <!-- 高光反射 -->
+    <ellipse class="highlight" cx="230" cy="130" rx="25" ry="40" fill="rgba(255,255,255,0.3)" transform="rotate(30 230 130)"/>
+    
+    <!-- 字母 G -->
+    <g transform="translate(200,200)">
+      <path class="g-path" d="M 55 0 A 55 55 0 1 0 30 47.63 L 8 47.63"
+            fill="none" stroke="#D63031" stroke-width="22" stroke-linecap="round"/>
+      <line class="g-bar" x1="-5" y1="0" x2="35" y2="0"
+            stroke="#D63031" stroke-width="22" stroke-linecap="round"/>
+    </g>
+  </g>
+  
+  <!-- 点击重播脚本 -->
+  <script type="text/javascript"><![CDATA[
+    document.addEventListener('click', function() {
+      var svg = document.querySelector('svg');
+      var clone = svg.cloneNode(true);
+      svg.parentNode.replaceChild(clone, svg);
+    });
+  ]]></script>
+</svg>
